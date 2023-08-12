@@ -1,4 +1,4 @@
-rootProject.name = "Rarity"
+rootProject.name = "LoreEditor"
 include("api")
 include("plugin")
 include("common")

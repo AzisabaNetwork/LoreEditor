@@ -6,8 +6,8 @@ plugins {
 }
 
 allprojects {
-    group = "net.azisaba.rarity"
-    version = "1.1.0"
+    group = "net.azisaba.loreeditor"
+    version = "1.0.0-SNAPSHOT"
 
     apply {
         plugin("java")
@@ -48,6 +48,14 @@ allprojects {
         mavenCentral()
         maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/public/") }
         maven { url = uri("https://repo.azisaba.net/repository/maven-public/") }
+        maven { url = uri("https://repo.acrylicstyle.xyz/repository/maven-public/") }
+        if (properties["azisabaNmsUsername"] != null && properties["azisabaNmsPassword"] != null) {
+            maven {
+                name = "azisabaNms"
+                credentials(PasswordCredentials::class)
+                url = uri("https://repo.azisaba.net/repository/nms/")
+            }
+        }
     }
 
     tasks {
@@ -60,10 +68,9 @@ allprojects {
         }
 
         shadowJar {
-            relocate("xyz.acrylicstyle.util", "net.azisaba.rarity.libs.xyz.acrylicstyle.util")
-            relocate("org.mariadb.jdbc", "net.azisaba.rarity.libs.org.mariadb.jdbc")
-            relocate("com.zaxxer.hikari", "net.azisaba.rarity.libs.com.zaxxer.hikari")
-            archiveBaseName.set("Rarity-${project.name}")
+            relocate("xyz.acrylicstyle.util", "net.azisaba.loreeditor.libs.xyz.acrylicstyle.util")
+            relocate("net.kyori", "net.azisaba.loreeditor.libs.net.kyori")
+            archiveBaseName.set("LoreEditor-${project.name}")
         }
     }
 }
