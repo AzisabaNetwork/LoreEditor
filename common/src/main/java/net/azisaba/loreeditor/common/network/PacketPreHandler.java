@@ -163,6 +163,9 @@ public class PacketPreHandler extends ChannelDuplexHandler {
         loreEditorTag.setBoolean("had_display_tag", hadDisplayTag);
         loreEditorTag.setBoolean("had_lore_tag", hadLoreTag);
         loreEditorTag.setBoolean("had_tag", hadTag);
+        if (lines.get() == 0 && !hadTag) {
+            return;
+        }
         tag.set("lore_editor", loreEditorTag);
         item.setTag(tag);
     }

@@ -71,6 +71,7 @@ allprojects {
         shadowJar {
             relocate("xyz.acrylicstyle.util", "net.azisaba.loreeditor.libs.xyz.acrylicstyle.util")
             relocate("net.kyori", "net.azisaba.loreeditor.libs.net.kyori")
+            relocate("com.google.gson", "net.azisaba.loreeditor.libs.com.google.gson")
             archiveBaseName.set("LoreEditor-${project.name}")
         }
     }
