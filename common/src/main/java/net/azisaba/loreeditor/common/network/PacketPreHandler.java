@@ -123,7 +123,12 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                         .map(component -> JSONComponentSerializer.json().serialize(component))
                         .collect(Collectors.toList());
         Consumer<ListTag> addLore = list -> {
-            for (String component : components) {
+            for (int i = 0; i < components.size(); i++) {
+                String component = components.get(i);
+                if (component == null) {
+                    plugin.getLogger().warning("Attempted to add null component at #" + i);
+                    continue;
+                }
                 list.add(StringTag.create(component));
             }
             lines.addAndGet(components.size());
@@ -136,7 +141,12 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                 try {
                     Component component = Component.STATIC.deserialize(displayTag.get().getString("Lore"));
                     if (component != null) {
-                        for (String s : components) {
+                        for (int i = 0; i < components.size(); i++) {
+                            String s = components.get(i);
+                            if (s == null) {
+                                plugin.getLogger().warning("Attempted to add null component at #" + i);
+                                continue;
+                            }
                             component.addSiblingText(LegacyComponentSerializer.legacySection().serialize(JSONComponentSerializer.json().deserialize(s)));
                         }
                         lines.addAndGet(components.size());
