@@ -21,6 +21,11 @@ public class ReflectionUtil {
     }
 
     public static @NotNull String getServerImplVersion() {
+        switch (Bukkit.getBukkitVersion()) {
+            case "1.20.1-R0.1-SNAPSHOT":
+            case "1.20.2-R0.1-SNAPSHOT":
+                return "v1_20";
+        }
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     }
 
@@ -38,7 +43,7 @@ public class ReflectionUtil {
 
     public static @NotNull Class<?> getOBCClass(@NotNull String name) {
         try {
-            return Class.forName("org.bukkit.craftbukkit." + getServerImplVersion() + "." + name);
+            return Class.forName(Bukkit.getServer().getClass().getPackage().getName() + "." + name);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
