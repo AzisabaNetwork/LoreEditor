@@ -122,6 +122,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                         .stream()
                         .map(component -> JSONComponentSerializer.json().serialize(component))
                         .collect(Collectors.toList());
+        if (components.isEmpty()) return;
         Consumer<ListTag> addLore = list -> {
             for (int i = 0; i < components.size(); i++) {
                 String component = components.get(i);
@@ -169,6 +170,8 @@ public class PacketPreHandler extends ChannelDuplexHandler {
         }
         if (lines.get() >= 1) {
             loreEditorTag.setInt("modify_count", lines.get());
+        } else {
+            return;
         }
         loreEditorTag.setBoolean("had_display_tag", hadDisplayTag);
         loreEditorTag.setBoolean("had_lore_tag", hadLoreTag);
@@ -180,7 +183,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
         item.setTag(tag);
     }
 
-    public static void reverseProcessItemStack(@Nullable ItemStack item) {
+    public void reverseProcessItemStack(@Nullable ItemStack item) {
         if (item == null) return;
         CompoundTag tag = item.getTag();
         if (tag == null) return;
