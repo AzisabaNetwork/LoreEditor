@@ -1,6 +1,7 @@
 dependencies {
     api(project(":common"))
     api(project(":v1_15_R1"))
+    api(project(":v1_16_R3"))
     api(project(":v1_19_R3"))
     api(project(":v1_20"))
 }
