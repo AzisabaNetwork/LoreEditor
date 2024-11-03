@@ -35,4 +35,13 @@ public class ClientboundWindowItemsImpl implements ClientboundWindowItems {
         }
         return items;
     }
+
+    @Override
+    public void setItems(@NotNull List<ItemStack> items) {
+        List<Object> list = new ArrayList<>();
+        for (ItemStack item : items) {
+            list.add(((ItemStackImpl) item).getHandle());
+        }
+        ReflectionUtil.setField(getHandle(), "b", list);
+    }
 }

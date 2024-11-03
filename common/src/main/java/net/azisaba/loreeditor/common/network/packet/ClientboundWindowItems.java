@@ -19,4 +19,6 @@ public interface ClientboundWindowItems {
      */
     @NotNull
     List<ItemStack> getItems();
+
+    void setItems(@NotNull List<ItemStack> items);
 }

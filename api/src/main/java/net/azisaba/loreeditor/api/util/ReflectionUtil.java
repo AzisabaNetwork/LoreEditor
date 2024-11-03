@@ -87,4 +87,14 @@ public class ReflectionUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static void setField(@NotNull Object o, @NotNull String fieldName, @NotNull Object value) {
+        try {
+            Field field = o.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(o, value);
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

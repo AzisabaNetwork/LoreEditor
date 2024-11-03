@@ -50,13 +50,13 @@ public class PacketPreHandler extends ChannelDuplexHandler {
     public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object msg) throws Exception {
         // client -> server
         try {
-            if (msg.getClass().getSimpleName().contains("SetCreativeSlot")) {
+            if (msg.getClass().getSimpleName().contains("SetCreative")) {
                 ServerboundSetCreativeSlot packet = ServerboundSetCreativeSlot.getInstance(msg);
                 reverseProcessItemStack(packet.getItem());
-            } else if (msg.getClass().getSimpleName().contains("WindowClick")) {
+            } else if (msg.getClass().getSimpleName().contains("WindowClick") || msg.getClass().getSimpleName().contains("ContainerClick")) {
                 ServerboundClickContainerSlot packet = ServerboundClickContainerSlot.getInstance(msg);
                 reverseProcessItemStack(packet.getItem());
-            } else if (msg.getClass().getSimpleName().contains("CloseWindow")) {
+            } else if (msg.getClass().getSimpleName().contains("ContainerClose") || msg.getClass().getSimpleName().contains("WindowClose")) {
                 if (player.getOpenInventory().getType() == InventoryType.MERCHANT) {
                     // re-add lore after trading
                     Bukkit.getScheduler().runTask(plugin, player::updateInventory);
@@ -75,23 +75,28 @@ public class PacketPreHandler extends ChannelDuplexHandler {
             if (msg.getClass().getSimpleName().contains("WindowItems") || msg.getClass().getSimpleName().contains("ContainerSetContent")) {
                 if (player.getOpenInventory().getType() != InventoryType.MERCHANT) {
                     ClientboundWindowItems packet = ClientboundWindowItems.getInstance(msg);
-                    packet.getItems().forEach(i -> {
+                    packet.setItems(packet.getItems().stream().map(ItemStack::copy).peek(i -> {
                         PROCESS_ITEM_PERF_COUNTER.recordStart();
                         try {
                             processItemStack(i);
                         } finally {
                             PROCESS_ITEM_PERF_COUNTER.recordEnd();
                         }
-                    });
+                    }).collect(Collectors.toList()));
                 }
             } else if (msg.getClass().getSimpleName().contains("SetSlot")) {
                 if (player.getOpenInventory().getType() != InventoryType.MERCHANT) {
                     ClientboundSetSlot packet = ClientboundSetSlot.getInstance(msg);
-                    PROCESS_ITEM_PERF_COUNTER.recordStart();
-                    try {
-                        processItemStack(packet.getItem());
-                    } finally {
-                        PROCESS_ITEM_PERF_COUNTER.recordEnd();
+                    ItemStack item = packet.getItem();
+                    if (item != null) {
+                        item = item.copy();
+                        PROCESS_ITEM_PERF_COUNTER.recordStart();
+                        try {
+                            processItemStack(item);
+                        } finally {
+                            PROCESS_ITEM_PERF_COUNTER.recordEnd();
+                        }
+                        packet.replaceItem(item);
                     }
                 }
             }
@@ -102,14 +107,14 @@ public class PacketPreHandler extends ChannelDuplexHandler {
     }
 
     public void processItemStack(@Nullable ItemStack item) {
-        if (item == null) return;
+        if (item == null || item.getCount() == 0) return;
         CompoundTag tag = item.getTag();
         boolean hadTag = tag != null;
         if (tag == null) {
             tag = CompoundTag.getInstance(null).constructor();
         }
         if (tag.hasKeyOfType("lore_editor", 10)) {
-            reverseProcessItemStack(item);
+            return;
         }
         CompoundTag loreEditorTag = CompoundTag.getInstance(null).constructor();
         AtomicReference<CompoundTag> displayTag = new AtomicReference<>(tag.getCompound("display"));

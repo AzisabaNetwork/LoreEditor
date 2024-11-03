@@ -7,11 +7,14 @@ import net.azisaba.loreeditor.common.util.Reflected;
 import net.azisaba.loreeditor.v1_21_1.chat.ComponentImpl;
 import net.azisaba.loreeditor.v1_21_1.item.tag.CompoundTagImpl;
 import net.azisaba.loreeditor.v1_21_1.item.tag.ListTagImpl;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +48,7 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
             customData = CustomData.of(new net.minecraft.nbt.CompoundTag());
             handle.set(DataComponents.CUSTOM_DATA, customData);
         }
-        return new CompoundTagImpl(customData.getUnsafe());
+        return handleLore(new CompoundTagImpl(customData.getUnsafe()));
     }
 
     @SuppressWarnings("deprecation")
@@ -53,9 +56,30 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
     public @Nullable CompoundTag getTag() {
         CustomData customData = handle.get(DataComponents.CUSTOM_DATA);
         if (customData == null) {
-            return null;
+            return handleLore(null);
         }
-        return new CompoundTagImpl(customData.getUnsafe());
+        return handleLore(new CompoundTagImpl(customData.getUnsafe()));
+    }
+
+    private CompoundTag handleLore(@Nullable CompoundTag base) {
+        var handle = new net.minecraft.nbt.ListTag();
+        ListTag listTag = new ListTagImpl(handle);
+        if (handle().has(DataComponents.LORE)) {
+            Objects.requireNonNull(handle().get(DataComponents.LORE)).lines()
+                    .forEach(component -> handle.add(StringTag.valueOf(ComponentImpl.serializeToJson(component))));
+        } else {
+            return base;
+        }
+        if (handle.isEmpty()) {
+            return base;
+        }
+        if (base == null) {
+            base = new CompoundTagImpl(new net.minecraft.nbt.CompoundTag());
+        }
+        CompoundTag displayTag = base.getCompound("display");
+        displayTag.set("Lore", listTag);
+        base.set("display", displayTag);
+        return base;
     }
 
     @Override
@@ -75,6 +99,8 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
                                 .map(ComponentImpl::deserializeFromJson)
                                 .collect(Collectors.toUnmodifiableList());
                 handle.set(DataComponents.LORE, new ItemLore(lore));
+            } else {
+                handle.remove(DataComponents.LORE);
             }
         }
     }
@@ -86,6 +112,15 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
 
     @Override
     public @NotNull ItemStack copy() {
-        return new ItemStackImpl(handle.copy());
+        org.bukkit.inventory.ItemStack originalStack = handle.getBukkitStack();
+        org.bukkit.inventory.ItemStack stack = new org.bukkit.inventory.ItemStack(originalStack.getType(), handle.getCount());
+        if (originalStack.hasItemMeta()) {
+            stack.setItemMeta(originalStack.getItemMeta().clone());
+        }
+        return new ItemStackImpl(CraftItemStack.asNMSCopy(stack));
+    }
+
+    public DataComponentMap getComponents() {
+        return handle.getComponents();
     }
 }

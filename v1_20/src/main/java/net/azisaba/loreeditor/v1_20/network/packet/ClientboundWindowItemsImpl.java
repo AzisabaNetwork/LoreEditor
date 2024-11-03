@@ -1,7 +1,6 @@
 package net.azisaba.loreeditor.v1_20.network.packet;
 
 import net.azisaba.loreeditor.api.item.ItemStack;
-import net.azisaba.loreeditor.api.util.ReflectionUtil;
 import net.azisaba.loreeditor.common.network.packet.ClientboundWindowItems;
 import net.azisaba.loreeditor.v1_20.item.ItemStackImpl;
 import net.minecraft.network.protocol.game.PacketPlayOutWindowItems;
@@ -30,9 +29,16 @@ public class ClientboundWindowItemsImpl implements ClientboundWindowItems {
     @Override
     public @NotNull List<ItemStack> getItems() {
         List<ItemStack> items = new ArrayList<>();
-        for (Object o : ((List<?>) ReflectionUtil.getField(getHandle(), "c"))) {
+        for (Object o : handle.d()) {
             items.add(ItemStackImpl.getInstance(o));
         }
         return items;
+    }
+
+    @Override
+    public void setItems(@NotNull List<ItemStack> items) {
+        for (int i = 0; i < items.size(); i++) {
+            handle.d().set(i, ((ItemStackImpl) items.get(i)).handle());
+        }
     }
 }

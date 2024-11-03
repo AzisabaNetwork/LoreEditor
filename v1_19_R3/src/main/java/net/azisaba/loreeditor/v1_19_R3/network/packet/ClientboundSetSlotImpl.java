@@ -29,4 +29,10 @@ public class ClientboundSetSlotImpl implements ClientboundSetSlot {
     public @Nullable ItemStack getItem() {
         return ItemStackImpl.getInstance(ReflectionUtil.getField(handle, "f"));
     }
+
+    @Override
+    public void replaceItem(@NotNull ItemStack item) {
+        if (getItem() == null) throw new IllegalStateException("Cannot replace null item (for now)");
+        getItem().setTag(item.getTag());
+    }
 }

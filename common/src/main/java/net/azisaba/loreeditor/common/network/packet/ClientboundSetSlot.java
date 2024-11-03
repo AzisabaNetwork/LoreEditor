@@ -12,4 +12,10 @@ public interface ClientboundSetSlot {
 
     @Nullable
     ItemStack getItem();
+
+    /**
+     * Replaces the item tag/component. Other properties of the item stack are not guaranteed to be preserved.
+     * @param item new item tag/component
+     */
+    void replaceItem(@NotNull ItemStack item);
 }

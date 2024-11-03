@@ -38,7 +38,7 @@ public record ComponentImpl(MutableComponent handle) implements Component {
         return net.minecraft.network.chat.Component.Serializer.fromJson(input, registries);
     }
 
-    public static String serializeToJson(@NotNull MutableComponent component) {
+    public static String serializeToJson(@NotNull net.minecraft.network.chat.Component component) {
         RegistryAccess registries = ((CraftServer) Bukkit.getServer()).getServer().registryAccess();
         return net.minecraft.network.chat.Component.Serializer.toJson(component, registries);
     }
