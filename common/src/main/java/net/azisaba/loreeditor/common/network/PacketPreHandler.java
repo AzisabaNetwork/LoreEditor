@@ -53,11 +53,9 @@ public class PacketPreHandler extends ChannelDuplexHandler {
             if (msg.getClass().getSimpleName().contains("SetCreativeSlot")) {
                 ServerboundSetCreativeSlot packet = ServerboundSetCreativeSlot.getInstance(msg);
                 reverseProcessItemStack(packet.getItem());
-                System.out.println("Reverse processed item (creative slot): " + packet.getItem());
             } else if (msg.getClass().getSimpleName().contains("WindowClick")) {
                 ServerboundClickContainerSlot packet = ServerboundClickContainerSlot.getInstance(msg);
                 reverseProcessItemStack(packet.getItem());
-                System.out.println("Reverse processed item (window click): " + packet.getItem());
             } else if (msg.getClass().getSimpleName().contains("CloseWindow")) {
                 if (player.getOpenInventory().getType() == InventoryType.MERCHANT) {
                     // re-add lore after trading
@@ -91,7 +89,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                     ClientboundSetSlot packet = ClientboundSetSlot.getInstance(msg);
                     PROCESS_ITEM_PERF_COUNTER.recordStart();
                     try {
-//                        processItemStack(packet.getItem());
+                        processItemStack(packet.getItem());
                     } finally {
                         PROCESS_ITEM_PERF_COUNTER.recordEnd();
                     }
@@ -110,9 +108,8 @@ public class PacketPreHandler extends ChannelDuplexHandler {
         if (tag == null) {
             tag = CompoundTag.getInstance(null).constructor();
         }
-        System.out.println("Processing item: " + item + " with tag: " + tag);
         if (tag.hasKeyOfType("lore_editor", 10)) {
-            return;
+            reverseProcessItemStack(item);
         }
         CompoundTag loreEditorTag = CompoundTag.getInstance(null).constructor();
         AtomicReference<CompoundTag> displayTag = new AtomicReference<>(tag.getCompound("display"));
