@@ -1,4 +1,4 @@
-package net.azisaba.loreeditor.v1_20.network;
+package net.azisaba.loreeditor.v1_21_1.network;
 
 import net.azisaba.loreeditor.api.util.ReflectionUtil;
 import org.jetbrains.annotations.NotNull;

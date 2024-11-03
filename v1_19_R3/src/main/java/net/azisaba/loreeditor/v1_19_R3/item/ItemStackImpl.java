@@ -49,4 +49,9 @@ public class ItemStackImpl implements ItemStack {
     public int getCount() {
         return handle.K(); // getCount (probably)
     }
+
+    @Override
+    public @NotNull ItemStack copy() {
+        return new ItemStackImpl(handle.o());
+    }
 }

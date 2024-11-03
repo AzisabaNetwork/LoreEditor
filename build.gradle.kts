@@ -2,18 +2,19 @@ plugins {
     java
     `java-library`
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.gradleup.shadow") version "8.3.3"
+    id("io.papermc.paperweight.userdev") version "1.7.4" apply false
 }
 
 allprojects {
     group = "net.azisaba.loreeditor"
-    version = "1.1.0-SNAPSHOT"
+    version = "1.2.0"
 
     apply {
         plugin("java")
         plugin("java-library")
         plugin("maven-publish")
-        plugin("com.github.johnrengelman.shadow")
+        plugin("com.gradleup.shadow")
     }
 
     java {
@@ -47,6 +48,11 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url = uri("https://hub.spigotmc.org/nexus/content/repositories/public/") }
+        maven("https://repo.papermc.io/repository/maven-public/") {
+            content {
+                includeGroup("io.papermc.paper")
+            }
+        }
         maven { url = uri("https://repo.azisaba.net/repository/maven-public/") }
         maven { url = uri("https://libraries.minecraft.net/") }
         if (properties["azisabaNmsUsername"] != null && properties["azisabaNmsPassword"] != null) {

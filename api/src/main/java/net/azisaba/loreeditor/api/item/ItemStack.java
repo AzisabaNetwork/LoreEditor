@@ -38,4 +38,7 @@ public interface ItemStack {
      * @return the amount
      */
     int getCount();
+
+    @NotNull
+    ItemStack copy();
 }

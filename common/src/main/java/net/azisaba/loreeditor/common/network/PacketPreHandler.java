@@ -53,9 +53,11 @@ public class PacketPreHandler extends ChannelDuplexHandler {
             if (msg.getClass().getSimpleName().contains("SetCreativeSlot")) {
                 ServerboundSetCreativeSlot packet = ServerboundSetCreativeSlot.getInstance(msg);
                 reverseProcessItemStack(packet.getItem());
+                System.out.println("Reverse processed item (creative slot): " + packet.getItem());
             } else if (msg.getClass().getSimpleName().contains("WindowClick")) {
                 ServerboundClickContainerSlot packet = ServerboundClickContainerSlot.getInstance(msg);
                 reverseProcessItemStack(packet.getItem());
+                System.out.println("Reverse processed item (window click): " + packet.getItem());
             } else if (msg.getClass().getSimpleName().contains("CloseWindow")) {
                 if (player.getOpenInventory().getType() == InventoryType.MERCHANT) {
                     // re-add lore after trading
@@ -72,7 +74,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         // server -> client
         try {
-            if (msg.getClass().getSimpleName().contains("WindowItems")) {
+            if (msg.getClass().getSimpleName().contains("WindowItems") || msg.getClass().getSimpleName().contains("ContainerSetContent")) {
                 if (player.getOpenInventory().getType() != InventoryType.MERCHANT) {
                     ClientboundWindowItems packet = ClientboundWindowItems.getInstance(msg);
                     packet.getItems().forEach(i -> {
@@ -89,7 +91,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                     ClientboundSetSlot packet = ClientboundSetSlot.getInstance(msg);
                     PROCESS_ITEM_PERF_COUNTER.recordStart();
                     try {
-                        processItemStack(packet.getItem());
+//                        processItemStack(packet.getItem());
                     } finally {
                         PROCESS_ITEM_PERF_COUNTER.recordEnd();
                     }
@@ -108,6 +110,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
         if (tag == null) {
             tag = CompoundTag.getInstance(null).constructor();
         }
+        System.out.println("Processing item: " + item + " with tag: " + tag);
         if (tag.hasKeyOfType("lore_editor", 10)) {
             return;
         }

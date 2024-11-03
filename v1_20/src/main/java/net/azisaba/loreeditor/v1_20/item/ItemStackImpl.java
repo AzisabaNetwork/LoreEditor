@@ -48,4 +48,9 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
     public int getCount() {
         return handle.K(); // getCount (probably)
     }
+
+    @Override
+    public @NotNull ItemStack copy() {
+        return new ItemStackImpl(handle.p());
+    }
 }
