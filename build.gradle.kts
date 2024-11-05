@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = "net.azisaba.loreeditor"
-    version = "1.2.2"
+    version = "1.2.3"
 
     apply {
         plugin("java")
