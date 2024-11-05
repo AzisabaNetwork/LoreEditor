@@ -87,6 +87,7 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
         handle.set(DataComponents.CUSTOM_DATA, tag == null ? null : CustomData.of(((CompoundTagImpl) tag).getHandle()));
         if (tag != null) {
             if (!tag.hasKeyOfType("display", 10)) {
+                handle.remove(DataComponents.LORE);
                 return;
             }
             CompoundTag displayTag = tag.getCompound("display");
@@ -102,6 +103,8 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
             } else {
                 handle.remove(DataComponents.LORE);
             }
+        } else {
+            handle.remove(DataComponents.LORE);
         }
     }
 
