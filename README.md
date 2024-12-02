@@ -8,21 +8,21 @@ This plugin only supports versions listed in the [Modrinth page](https://modrint
 
 Check your server version before downloading the plugin!
 
-## Features
+## ✨Features
 
 - Add lore lines to items, without affecting an actual item.
 
-## Installation
+## 📥Installation
 
 You can download the latest version of LoreEditor from the [Modrinth](https://modrinth.com/plugin/loreeditor) and then place it in your `plugins` folder.
 
-## Developer API
+## 🔧Developer API
 
 LoreEditor provides a simple API for developers to use.
 
-### Dependency
+### 💻Dependency
 
-#### plugin.yml
+#### 📝plugin.yml
 
 To use LoreEditor in your plugin, you need to add the following to your `plugin.yml`:
 
@@ -65,7 +65,7 @@ dependencies {
 }
 ```
 
-### Usage
+### ⌨️Usage
 
 #### Add lore lines
 
@@ -91,6 +91,6 @@ public class TestPlugin extends JavaPlugin {
 }
 ```
 
-## License
+## 📜License
 
 LoreEditor is licensed under the [GNU General Public License v3.0](LICENSE).
