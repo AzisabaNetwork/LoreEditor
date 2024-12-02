@@ -2,6 +2,12 @@
 
 Packet-level item lore modification for Spigot and its forks.
 
+## ⚠️Warning
+
+This plugin only supports versions listed in the [Modrinth page](https://modrinth.com/plugin/loreeditor). Other versions will NOT work.
+
+Check your server version before downloading the plugin!
+
 ## Features
 
 - Add lore lines to items, without affecting an actual item.
