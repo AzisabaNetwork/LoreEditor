@@ -5,6 +5,7 @@ dependencies {
     api(project(":v1_19_R3"))
     api(project(":v1_20"))
     api(project(":v1_21_1"))
+    api(project(":v1_21_3"))
 }
 
 tasks {
