@@ -70,12 +70,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                 if (player.getOpenInventory().getType() != InventoryType.MERCHANT) {
                     ClientboundWindowItems packet = ClientboundWindowItems.getInstance(msg);
                     packet.setItems(packet.getItems().stream().map(ItemStack::copy).peek(i -> {
-                        PROCESS_ITEM_PERF_COUNTER.recordStart();
-                        try {
-                            processItemStack(i);
-                        } finally {
-                            PROCESS_ITEM_PERF_COUNTER.recordEnd();
-                        }
+                        processItemStack(i);
                     }).collect(Collectors.toList()));
                 }
             } else if (msg.getClass().getSimpleName().contains("SetSlot")) {
@@ -84,12 +79,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                     ItemStack item = packet.getItem();
                     if (item != null) {
                         item = item.copy();
-                        PROCESS_ITEM_PERF_COUNTER.recordStart();
-                        try {
-                            processItemStack(item);
-                        } finally {
-                            PROCESS_ITEM_PERF_COUNTER.recordEnd();
-                        }
+                        processItemStack(item);
                         packet.replaceItem(item);
                     }
                 }
