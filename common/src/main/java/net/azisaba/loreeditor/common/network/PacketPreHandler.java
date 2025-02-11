@@ -24,7 +24,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import xyz.acrylicstyle.util.PerformanceCounter;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,17 +32,12 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class PacketPreHandler extends ChannelDuplexHandler {
-    private static final PerformanceCounter PROCESS_ITEM_PERF_COUNTER = new PerformanceCounter(PerformanceCounter.Unit.NANOSECONDS);
     private final Plugin plugin;
     private final Player player;
 
     public PacketPreHandler(@NotNull Plugin plugin, @NotNull Player player) {
         this.plugin = plugin;
         this.player = player;
-    }
-
-    public static @NotNull String getPerformanceStats(boolean multiline) {
-        return PROCESS_ITEM_PERF_COUNTER.getDetails(multiline);
     }
 
     @Override
