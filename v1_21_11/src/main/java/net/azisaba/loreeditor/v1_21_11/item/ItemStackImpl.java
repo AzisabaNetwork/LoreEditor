@@ -10,6 +10,7 @@ import net.azisaba.loreeditor.v1_21_11.item.tag.ListTagImpl;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.StringTagVisitor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
@@ -96,11 +97,14 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
                         ((ListTagImpl) listTag).getHandle()
                                 .stream()
                                 .map(t -> {
-                                    if (t instanceof StringTag) {
-                                        return t.asString().orElse("");
-                                    } else {
-                                        return t.toString();
+                                    StringTagVisitor visitor = new StringTagVisitor();
+                                    t.accept(visitor);
+                                    String json = visitor.build();
+                                    // strip a single quote around JSON, if any
+                                    if (json.startsWith("'") && json.endsWith("'")) {
+                                        json = json.substring(1, json.length() - 1);
                                     }
+                                    return json;
                                 })
                                 .map(ComponentImpl::deserializeFromJson)
                                 .collect(Collectors.toUnmodifiableList());

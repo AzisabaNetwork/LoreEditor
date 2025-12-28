@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = "net.azisaba.loreeditor"
-    version = "1.3.2"
+    version = "1.3.3"
 
     apply {
         plugin("java")
@@ -76,7 +76,9 @@ allprojects {
         shadowJar {
             relocate("xyz.acrylicstyle.util", "net.azisaba.loreeditor.libs.xyz.acrylicstyle.util")
             relocate("net.kyori", "net.azisaba.loreeditor.libs.net.kyori")
-            relocate("com.google.gson", "net.azisaba.loreeditor.libs.com.google.gson")
+            // exclude gson
+            exclude("com/google/gson/**")
+            //relocate("com.google.gson", "net.azisaba.loreeditor.libs.com.google.gson")
             archiveBaseName.set("LoreEditor-${project.name}")
         }
     }
