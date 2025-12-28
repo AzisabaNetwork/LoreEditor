@@ -4,5 +4,5 @@ dependencies {
     api("net.kyori:adventure-api:4.14.0")
     api("net.kyori:adventure-text-serializer-gson:4.14.0")
     api("net.kyori:adventure-text-serializer-legacy:4.14.0")
-    api("xyz.acrylicstyle.java-util:common:1.2.1-SNAPSHOT")
+    api("xyz.acrylicstyle.java-util:common:2.1.1")
 }

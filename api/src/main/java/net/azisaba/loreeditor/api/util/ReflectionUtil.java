@@ -30,6 +30,8 @@ public class ReflectionUtil {
             case "1.21.2-R0.1-SNAPSHOT":
             case "1.21.3-R0.1-SNAPSHOT":
                 return "v1_21_3";
+            case "1.21.11-R0.1-SNAPSHOT":
+                return "v1_21_11";
         }
         return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
     }

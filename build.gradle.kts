@@ -2,13 +2,13 @@ plugins {
     java
     `java-library`
     `maven-publish`
-    id("com.gradleup.shadow") version "8.3.3"
-    id("io.papermc.paperweight.userdev") version "1.7.4" apply false
+    id("com.gradleup.shadow") version "9.3.0"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19" apply false
 }
 
 allprojects {
     group = "net.azisaba.loreeditor"
-    version = "1.3.1"
+    version = "1.3.2"
 
     apply {
         plugin("java")
