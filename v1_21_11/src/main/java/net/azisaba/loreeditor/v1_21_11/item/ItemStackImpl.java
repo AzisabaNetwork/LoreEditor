@@ -11,6 +11,7 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.StringTagVisitor;
+import net.minecraft.network.HashedStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
