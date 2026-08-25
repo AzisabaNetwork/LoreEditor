@@ -209,7 +209,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                 try {
                     Component component = Component.STATIC.deserialize(displayTag.getString("Lore"));
                     if (component != null) {
-                        for (int i = 0; i < count; i++) {
+                        for (int i = 0; i < count && !component.getSiblings().isEmpty(); i++) {
                             component.getSiblings().remove(component.getSiblings().size() - 1);
                         }
                         displayTag.setString("Lore", Component.STATIC.serialize(component));
@@ -219,7 +219,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                 }
             } else {
                 ListTag list = displayTag.getList("Lore", 8);
-                for (int i = 0; i < count; i++) {
+                for (int i = 0; i < count && list.size() > 0; i++) {
                     list.removeAt(list.size() - 1);
                 }
                 displayTag.set("Lore", list);
