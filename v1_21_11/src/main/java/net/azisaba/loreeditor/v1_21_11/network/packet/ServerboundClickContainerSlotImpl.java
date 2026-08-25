@@ -24,7 +24,6 @@ public class ServerboundClickContainerSlotImpl implements ServerboundClickContai
 
     @Override
     public @Nullable ItemStack getItem() {
-        if (true) return null; // TODO: restore ItemStack?
         return ItemStackImpl.getInstance(handle.carriedItem());
     }
 }
