@@ -10,7 +10,6 @@ import net.azisaba.loreeditor.v1_21_1.item.tag.ListTagImpl;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemLore;
@@ -84,26 +83,33 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
 
     @Override
     public void setTag(@Nullable CompoundTag tag) {
-        handle.set(DataComponents.CUSTOM_DATA, tag == null ? null : CustomData.of(((CompoundTagImpl) tag).getHandle()));
         if (tag != null) {
+            // Convert display.Lore (virtual bridge) to DataComponents.LORE first.
+            // This must happen before CUSTOM_DATA is set, so that if deserialization
+            // fails, CUSTOM_DATA is not left with a stale lore_editor tag.
             if (!tag.hasKeyOfType("display", 10)) {
                 handle.set(DataComponents.LORE, ItemLore.EMPTY);
-                return;
-            }
-            CompoundTag displayTag = tag.getCompound("display");
-            ListTag listTag = displayTag.getList("Lore", 8);
-            if (listTag.size() > 0) {
-                List<Component> lore =
-                        ((ListTagImpl) listTag).getHandle()
-                                .stream()
-                                .map(Tag::getAsString)
-                                .map(ComponentImpl::deserializeFromJson)
-                                .collect(Collectors.toUnmodifiableList());
-                handle.set(DataComponents.LORE, new ItemLore(lore));
             } else {
-                handle.set(DataComponents.LORE, ItemLore.EMPTY);
+                CompoundTag displayTag = tag.getCompound("display");
+                ListTag listTag = displayTag.getList("Lore", 8);
+                if (listTag.size() > 0) {
+                    List<Component> lore =
+                            ((ListTagImpl) listTag).getHandle()
+                                    .stream()
+                                    .map(t -> ((net.minecraft.nbt.StringTag) t).value())
+                                    .map(ComponentImpl::deserializeFromJson)
+                                    .collect(Collectors.toUnmodifiableList());
+                    handle.set(DataComponents.LORE, new ItemLore(lore));
+                } else {
+                    handle.set(DataComponents.LORE, ItemLore.EMPTY);
+                }
+                // Remove virtual display.Lore from CUSTOM_DATA to avoid double storage
+                displayTag.remove("Lore");
+                tag.set("display", displayTag);
             }
+            handle.set(DataComponents.CUSTOM_DATA, CustomData.of(((CompoundTagImpl) tag).getHandle()));
         } else {
+            handle.set(DataComponents.CUSTOM_DATA, null);
             handle.set(DataComponents.LORE, ItemLore.EMPTY);
         }
     }
