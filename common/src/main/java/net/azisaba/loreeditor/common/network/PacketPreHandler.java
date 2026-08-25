@@ -113,6 +113,7 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                         .collect(Collectors.toList());
         if (components.isEmpty()) return;
         Consumer<ListTag> addLore = list -> {
+            int added = 0;
             for (int i = 0; i < components.size(); i++) {
                 String component = components.get(i);
                 if (component == null) {
@@ -120,8 +121,9 @@ public class PacketPreHandler extends ChannelDuplexHandler {
                     continue;
                 }
                 list.add(StringTag.create(component));
+                added++;
             }
-            lines.addAndGet(components.size());
+            lines.addAndGet(added);
             displayTag.get().set("Lore", list);
         };
         if (displayTag.get().hasKeyOfType("Lore", 8) || displayTag.get().hasKeyOfType("Lore", 9)) {
