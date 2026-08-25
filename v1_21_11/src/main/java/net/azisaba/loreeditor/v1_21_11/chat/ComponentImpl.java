@@ -1,7 +1,7 @@
 package net.azisaba.loreeditor.v1_21_11.chat;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.azisaba.loreeditor.common.chat.ChatModifier;
 import net.azisaba.loreeditor.common.chat.Component;
@@ -37,7 +37,7 @@ public record ComponentImpl(MutableComponent handle) implements Component {
     }
 
     public static MutableComponent deserializeFromJson(@NotNull String input) {
-        return ComponentSerialization.CODEC.decode(JsonOps.INSTANCE, GSON.fromJson(input, JsonObject.class)).getOrThrow().getFirst().copy();
+        return ComponentSerialization.CODEC.decode(JsonOps.INSTANCE, GSON.fromJson(input, JsonElement.class)).getOrThrow().getFirst().copy();
     }
 
     public static String serializeToJson(@NotNull net.minecraft.network.chat.Component component) {
