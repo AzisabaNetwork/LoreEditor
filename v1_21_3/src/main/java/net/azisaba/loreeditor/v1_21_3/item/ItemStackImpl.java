@@ -96,7 +96,7 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
                     List<Component> lore =
                             ((ListTagImpl) listTag).getHandle()
                                     .stream()
-                                    .map(t -> ((net.minecraft.nbt.StringTag) t).value())
+                                    .map(net.minecraft.nbt.Tag::getAsString)
                                     .map(ComponentImpl::deserializeFromJson)
                                     .collect(Collectors.toUnmodifiableList());
                     handle.set(DataComponents.LORE, new ItemLore(lore));
