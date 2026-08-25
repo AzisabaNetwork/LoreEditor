@@ -31,7 +31,8 @@ public class ClientboundSetSlotImpl implements ClientboundSetSlot {
 
     @Override
     public void replaceItem(@NotNull ItemStack item) {
-        if (getItem() == null) throw new IllegalStateException("Cannot replace null item (for now)");
-        ((ItemStackImpl) getItem()).handle().restorePatch(((ItemStackImpl) item).handle().getComponentsPatch());
+        ItemStack current = getItem();
+        if (current == null) throw new IllegalStateException("Cannot replace null item (for now)");
+        ((ItemStackImpl) current).handle().restorePatch(((ItemStackImpl) item).handle().getComponentsPatch());
     }
 }
