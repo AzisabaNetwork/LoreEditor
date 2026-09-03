@@ -36,7 +36,10 @@ public record ItemStackImpl(net.minecraft.world.item.ItemStack handle) implement
     @Reflected
     public static @NotNull ItemStackImpl getInstance(@NotNull Object item) {
         Objects.requireNonNull(item, "item");
-        return new ItemStackImpl((net.minecraft.world.item.ItemStack) item);
+        if (item instanceof net.minecraft.world.item.ItemStack itemStack) {
+            return new ItemStackImpl(itemStack);
+        }
+        throw new IllegalArgumentException("Expected net.minecraft.world.item.ItemStack, but got: " + item.getClass().getName());
     }
 
     @SuppressWarnings("deprecation")

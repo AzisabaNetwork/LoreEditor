@@ -2,7 +2,6 @@ package net.azisaba.loreeditor.v1_21_11.network.packet;
 
 import net.azisaba.loreeditor.api.item.ItemStack;
 import net.azisaba.loreeditor.common.network.packet.ServerboundClickContainerSlot;
-import net.azisaba.loreeditor.v1_21_11.item.ItemStackImpl;
 import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +23,6 @@ public class ServerboundClickContainerSlotImpl implements ServerboundClickContai
 
     @Override
     public @Nullable ItemStack getItem() {
-        return ItemStackImpl.getInstance(handle.carriedItem());
+        return null;
     }
 }
