@@ -67,11 +67,6 @@ allprojects {
     tasks {
         javadoc {
             options.encoding = "UTF-8"
-            (options as? StandardJavadocDocletOptions)?.apply {
-                addStringOption("Xdoclint:none", "-quiet")
-                charSet = "UTF-8"
-                docEncoding = "UTF-8"
-            }
         }
 
         compileJava {
